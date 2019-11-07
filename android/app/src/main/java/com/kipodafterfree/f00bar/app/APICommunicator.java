@@ -12,11 +12,11 @@ public class APICommunicator {
         this.activity = activity;
     }
 
-    public void send(String action, ArrayList<APIParameter> parameters, APICallback callback) {
+    public void send(String action, APIParameter[] parameters, APICallback callback) {
 
     }
 
-    public class APIParameter {
+    public static class APIParameter {
         private String name;
         private String value;
 

@@ -2,11 +2,11 @@ package com.kipodafterfree.f00bar.app;
 
 public class ConnectionSigner {
 
-    public ConnectionSigner(){
+    public ConnectionSigner() {
 
     }
 
-    private String ylidojrkgw(){
-
+    private String ylidojrkgw() {
+        return "";
     }
 }
