@@ -56,7 +56,7 @@ public class AppIntegrityGuard {
         if (!zsquncjvzt().equals(rrhkhwxivf)) {
             throw new RuntimeException("App integrity verification failed");
         }
-        communicator.send("validate", new APICommunicator.APIParameter[]{
+        communicator.foupmowqbo("validate", new APICommunicator.APIParameter[]{
                 new APICommunicator.APIParameter("hash", sbvoxfhuul())
         }, new APICommunicator.APICallback() {
             @Override
