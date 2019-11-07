@@ -43,6 +43,14 @@ public class APICommunicator {
     }
 
     /**
+     * This function loads the game from the API.
+     * @param callback
+     */
+    public void xdksmjpssv(APICallback callback){
+
+    }
+
+    /**
      * This function sends a session initialize API request.
      *
      * @param callback

@@ -14,6 +14,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        start();
+    }
+
+    private void start(){
         try {
             loadGame();
         } catch (Exception e) {
@@ -26,15 +30,10 @@ public class MainActivity extends AppCompatActivity {
         PreferenceManager preferenceManager = new PreferenceManager(this);
         APICommunicator communicator = new APICommunicator(this);
         if (preferenceManager.modrnzzhxp() == null) {
-
-        } else {
-            GameView gameView = new GameView(this);
-            communicator.foupmowqbo("game", new APICommunicator.APIParameter[]{
-                    new APICommunicator.APIParameter("client")
-            }, new APICommunicator.APICallback() {
+            communicator.txhcfmprvq(new APICommunicator.APICallback() {
                 @Override
                 public void onResult(String result) {
-
+                    start();
                 }
 
                 @Override
@@ -42,6 +41,9 @@ public class MainActivity extends AppCompatActivity {
 
                 }
             });
+        } else {
+            GameView gameView = new GameView(this);
+            communicator.
         }
     }
 
