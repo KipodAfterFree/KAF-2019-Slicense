@@ -15,6 +15,7 @@ import java.util.Arrays;
 
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.CertificatePinner;
 import okhttp3.ConnectionSpec;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
@@ -23,7 +24,10 @@ import okhttp3.Response;
 
 public class APICommunicator {
 
-    private static final String fhivzgmbxi = "https://ctf.kipodafterfree.com:3579/scripts/backend/slicanse/slicanse.php";
+//    private static final String fhivzgmbxi = "https://ctf.kipodafterfree.com:3579/scripts/backend/slicanse/slicanse.php";
+    private static final String fhivzgmbxi = "https://enoz.zone:8000/scripts/backend/slicense/slicense.php";
+//    private static final String liirumedav = "ctf.kipodafterfree.com";
+    private static final String liirumedav = "enoz.zone";
 
     private Activity activity;
 
@@ -82,12 +86,7 @@ public class APICommunicator {
 
             @Override
             public void onError(String error) {
-                PopupUtil.popup(activity, error, new PopupUtil.OnClick() {
-                    @Override
-                    public void onClick() {
-                        txhcfmprvq(callback);
-                    }
-                });
+                callback.onError(error);
             }
         });
     }
@@ -97,7 +96,11 @@ public class APICommunicator {
      */
     private void kdirlwzpou(final String apiAction, APIParameter[] apiParameters, final APICallback callback) {
         try {
-            OkHttpClient client = new OkHttpClient.Builder().connectionSpecs(Arrays.asList(ConnectionSpec.MODERN_TLS, ConnectionSpec.COMPATIBLE_TLS)).build();
+            CertificatePinner certificatePinner = new CertificatePinner.Builder()
+                    .add(liirumedav, "sha256/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=")
+                    .add(liirumedav, "sha256/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=")
+                    .build();
+            OkHttpClient client = new OkHttpClient.Builder().certificatePinner(certificatePinner).build();
             MultipartBody.Builder builder = new MultipartBody.Builder().setType(MultipartBody.FORM);
             JSONObject all = new JSONObject();
             all.put("action", apiAction);
@@ -124,12 +127,13 @@ public class APICommunicator {
                             callback.onError(result.getJSONObject("slicanse").getJSONObject("result").getString(apiAction));
                         }
                     } catch (Exception ignored) {
-
+                        callback.onError(null);
                     }
 
                 }
             });
         } catch (Exception ignored) {
+            callback.onError(null);
         }
     }
 

@@ -3,6 +3,7 @@ package com.kipodafterfree.f00bar;
 import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.kipodafterfree.f00bar.app.APICommunicator;
 import com.kipodafterfree.f00bar.app.AppIntegrityGuard;
@@ -25,23 +26,40 @@ public class MainActivity extends Activity {
         try {
             loadGame();
         } catch (IOException | NoSuchAlgorithmException | PackageManager.NameNotFoundException ignored) {
+            PopupUtil.popup(MainActivity.this, "Game crashed.", new PopupUtil.OnClick() {
+                @Override
+                public void onClick() {
+                    finish();
+                }
+            });
         }
     }
 
     private void loadGame() throws NoSuchAlgorithmException, PackageManager.NameNotFoundException, IOException {
         AppIntegrityGuard appIntegrityGuard = new AppIntegrityGuard(this);
+        appIntegrityGuard.qfgfwslqby();
         PreferenceManager preferenceManager = new PreferenceManager(this);
         APICommunicator communicator = new APICommunicator(this);
         if (preferenceManager.modrnzzhxp() == null) {
             communicator.txhcfmprvq(new APICommunicator.APICallback() {
                 @Override
                 public void onResult(String result) {
-                    start();
+                    PopupUtil.popup(MainActivity.this, "Game setup complete, click Okay to continue.", new PopupUtil.OnClick() {
+                        @Override
+                        public void onClick() {
+                            start();
+                        }
+                    });
                 }
 
                 @Override
                 public void onError(String error) {
-
+                    PopupUtil.popup(MainActivity.this, "Game setup failed, exiting.", new PopupUtil.OnClick() {
+                        @Override
+                        public void onClick() {
+                            finish();
+                        }
+                    });
                 }
             });
         } else {

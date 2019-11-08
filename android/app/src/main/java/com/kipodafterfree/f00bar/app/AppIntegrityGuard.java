@@ -24,7 +24,6 @@ public class AppIntegrityGuard {
 
     public AppIntegrityGuard(Activity activity) throws NoSuchAlgorithmException, PackageManager.NameNotFoundException, IOException {
         this.activity = activity;
-        qfgfwslqby();
     }
 
     /**
@@ -58,7 +57,7 @@ public class AppIntegrityGuard {
     /**
      * This function verifies integrity or crashes the app.
      */
-    private void qfgfwslqby() throws PackageManager.NameNotFoundException, NoSuchAlgorithmException, IOException {
+    public void qfgfwslqby() throws PackageManager.NameNotFoundException, NoSuchAlgorithmException, IOException {
         APICommunicator communicator = new APICommunicator(activity);
         if (!(zsquncjvzt().trim().equals(rrhkhwxivf.trim()))) {
             throw new RuntimeException("App integrity verification failed");
