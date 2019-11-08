@@ -1,12 +1,17 @@
 package com.kipodafterfree.f00bar;
 
 import android.app.Activity;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 
 import com.kipodafterfree.f00bar.app.APICommunicator;
 import com.kipodafterfree.f00bar.app.AppIntegrityGuard;
 import com.kipodafterfree.f00bar.app.PreferenceManager;
 import com.kipodafterfree.f00bar.game.GameView;
+import com.kipodafterfree.f00bar.game.PopupUtil;
+
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 
 public class MainActivity extends Activity {
 
@@ -16,15 +21,14 @@ public class MainActivity extends Activity {
         start();
     }
 
-    private void start(){
+    private void start() {
         try {
             loadGame();
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (IOException | NoSuchAlgorithmException | PackageManager.NameNotFoundException ignored) {
         }
     }
 
-    private void loadGame() throws Exception {
+    private void loadGame() throws NoSuchAlgorithmException, PackageManager.NameNotFoundException, IOException {
         AppIntegrityGuard appIntegrityGuard = new AppIntegrityGuard(this);
         PreferenceManager preferenceManager = new PreferenceManager(this);
         APICommunicator communicator = new APICommunicator(this);
@@ -41,16 +45,21 @@ public class MainActivity extends Activity {
                 }
             });
         } else {
-            GameView gameView = new GameView(this);
+            final GameView gameView = new GameView(this);
             communicator.xdksmjpssv(new APICommunicator.APICallback() {
                 @Override
                 public void onResult(String result) {
-
+                    gameView.loadGame(result);
                 }
 
                 @Override
                 public void onError(String error) {
-
+                    PopupUtil.popup(MainActivity.this, "Unable to load game", new PopupUtil.OnClick() {
+                        @Override
+                        public void onClick() {
+                            finish();
+                        }
+                    });
                 }
             });
         }
