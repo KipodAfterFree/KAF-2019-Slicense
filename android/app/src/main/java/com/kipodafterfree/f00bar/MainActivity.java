@@ -44,20 +44,30 @@ public class MainActivity extends Activity {
             communicator.txhcfmprvq(new APICommunicator.APICallback() {
                 @Override
                 public void onResult(String result) {
-                    PopupUtil.popup(MainActivity.this, "Game setup complete, click Okay to continue.", new PopupUtil.OnClick() {
+                    runOnUiThread(new Runnable() {
                         @Override
-                        public void onClick() {
-                            start();
+                        public void run() {
+                            PopupUtil.popup(MainActivity.this, "Game setup complete, click Okay to continue.", new PopupUtil.OnClick() {
+                                @Override
+                                public void onClick() {
+                                    start();
+                                }
+                            });
                         }
                     });
                 }
 
                 @Override
                 public void onError(String error) {
-                    PopupUtil.popup(MainActivity.this, "Game setup failed, exiting.", new PopupUtil.OnClick() {
+                    runOnUiThread(new Runnable() {
                         @Override
-                        public void onClick() {
-                            finish();
+                        public void run() {
+                            PopupUtil.popup(MainActivity.this, "Game setup failed, exiting.", new PopupUtil.OnClick() {
+                                @Override
+                                public void onClick() {
+                                    finish();
+                                }
+                            });
                         }
                     });
                 }
