@@ -1,7 +1,6 @@
 package com.kipodafterfree.f00bar;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.app.Activity;
 import android.os.Bundle;
 
 import com.kipodafterfree.f00bar.app.APICommunicator;
@@ -9,7 +8,7 @@ import com.kipodafterfree.f00bar.app.AppIntegrityGuard;
 import com.kipodafterfree.f00bar.app.PreferenceManager;
 import com.kipodafterfree.f00bar.game.GameView;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,12 +42,18 @@ public class MainActivity extends AppCompatActivity {
             });
         } else {
             GameView gameView = new GameView(this);
-            communicator.
+            communicator.xdksmjpssv(new APICommunicator.APICallback() {
+                @Override
+                public void onResult(String result) {
+
+                }
+
+                @Override
+                public void onError(String error) {
+
+                }
+            });
         }
-    }
-
-    private void popup(String text) {
-
     }
 
 }

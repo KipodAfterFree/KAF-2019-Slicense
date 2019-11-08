@@ -3,19 +3,19 @@ package com.kipodafterfree.f00bar.app;
 import android.app.Activity;
 import android.view.View;
 
-import com.kipodafterfree.f00bar.ui.PopupUtil;
+import com.google.common.hash.Hashing;
+import com.kipodafterfree.f00bar.game.PopupUtil;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.ConnectionSpec;
-import okhttp3.FormBody;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -39,15 +39,32 @@ public class APICommunicator {
      * @param callback
      */
     public void foupmowqbo(String action, APIParameter[] parameters, APICallback callback) {
+        try {
+            AppIntegrityGuard appIntegrityGuard = new AppIntegrityGuard(activity);
+            PreferenceManager preferenceManager = new PreferenceManager(activity);
 
+            APIParameter[] mimicedParameters = new APIParameter[3];
+            JSONObject jsonObject = new JSONObject();
+            for (APIParameter parameter : parameters) {
+
+                jsonObject.put(parameter.name, parameter.value);
+
+            }
+            mimicedParameters[0] = new APIParameter("parameters", jsonObject.toString());
+            mimicedParameters[1] = new APIParameter("hash", Hashing.hmacSha256((preferenceManager.modrnzzhxp() + appIntegrityGuard.sbvoxfhuul()).getBytes()).hashString(jsonObject.toString(), StandardCharsets.UTF_8).toString());
+            mimicedParameters[2] = new APIParameter("client", preferenceManager.modrnzzhxp());
+            kdirlwzpou(action, mimicedParameters, callback);
+        } catch (Exception ignored) {
+        }
     }
 
     /**
      * This function loads the game from the API.
-     * @param callback
+     *
+     * @param callback Callback in which to return the game HTML.
      */
-    public void xdksmjpssv(APICallback callback){
-
+    public void xdksmjpssv(APICallback callback) {
+        foupmowqbo("game", new APIParameter[0], callback);
     }
 
     /**
@@ -65,9 +82,9 @@ public class APICommunicator {
 
             @Override
             public void onError(String error) {
-                PopupUtil.popup(activity, error, new View.OnClickListener() {
+                PopupUtil.popup(activity, error, new PopupUtil.OnClick() {
                     @Override
-                    public void onClick(View view) {
+                    public void onClick() {
                         txhcfmprvq(callback);
                     }
                 });

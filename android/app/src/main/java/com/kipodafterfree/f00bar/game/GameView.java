@@ -1,20 +1,16 @@
 package com.kipodafterfree.f00bar.game;
 
 import android.app.Activity;
-import android.app.ActivityManager;
-import android.content.ContentResolver;
-import android.content.Context;
-import android.content.Intent;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.os.Build;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.EditText;
+
+import com.kipodafterfree.f00bar.app.APICommunicator;
 
 public class GameView extends WebView {
-    public GameView(Activity activity) {
+    public GameView(final Activity activity) {
         super(activity);
         // Setup client
         setWebViewClient(new WebViewClient() {
@@ -27,7 +23,32 @@ public class GameView extends WebView {
         addJavascriptInterface(new Object() {
             @JavascriptInterface
             public void popup(String text) {
+                PopupUtil.popup(activity, text, new PopupUtil.OnClick() {
+                    @Override
+                    public void onClick() {
 
+                    }
+                });
+            }
+
+            @JavascriptInterface
+            public void purchase() {
+                PopupUtil.popup(activity, "To continue, purchase the app.", new PopupUtil.OnClick() {
+                    @Override
+                    public void onClick() {
+                        PopupUtil.prompt(activity, "Enter your key", new PopupUtil.OnInput() {
+                            @Override
+                            public void onChange(EditText editText, String value) {
+
+                            }
+
+                            @Override
+                            public void onFinish(EditText editText, String value) {
+                                APICommunicator communicator = new APICommunicator(activity);
+                            }
+                        });
+                    }
+                });
             }
         }, "slicanse");
         // Setup Javascript
