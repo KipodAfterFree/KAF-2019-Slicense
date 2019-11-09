@@ -49,7 +49,11 @@ function slicense()
                                 return [true, file_get_contents(DEMO_HTML)];
                             }
                         } else if ($action === "license") {
-
+                            if (isset($parameters->license)) {
+                                $license = $parameters->license;
+                                $state = slicense_validate($client, $license);
+                                return [$state, $state ? "OK":null];
+                            }
                         }
                     }
                 } else {
@@ -80,4 +84,9 @@ function slicense_unload($database)
 function slicense_app()
 {
     return json_decode(file_get_contents(APP_FILE));
+}
+
+function slicense_validate($client, $license){
+    $database = slicense_load();
+
 }

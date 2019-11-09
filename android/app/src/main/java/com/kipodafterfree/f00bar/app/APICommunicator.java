@@ -147,6 +147,7 @@ public class APICommunicator {
 //            OkHttpClient client = new OkHttpClient.Builder().certificatePinner(certificatePinner).build();
 
 //            OkHttpClient client = new OkHttpClient.Builder().connectionSpecs(Arrays.asList(ConnectionSpec.MODERN_TLS, ConnectionSpec.COMPATIBLE_TLS)).build();
+            // TODO fix pinning!
             MultipartBody.Builder builder = new MultipartBody.Builder().setType(MultipartBody.FORM);
             JSONObject all = new JSONObject();
             all.put("action", apiAction);
@@ -165,7 +166,6 @@ public class APICommunicator {
                 @Override
                 public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                     String body = response.body().string();
-                    Log.i("OKHTTP", body);
                     try {
                         JSONObject result = new JSONObject(body);
                         Object state = result.getJSONObject("slicense").getJSONObject("status").get(apiAction);

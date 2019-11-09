@@ -22,7 +22,7 @@ public class AppIntegrityGuard {
 
     private Activity activity;
 
-    public AppIntegrityGuard(Activity activity) throws NoSuchAlgorithmException, PackageManager.NameNotFoundException, IOException {
+    public AppIntegrityGuard(Activity activity) {
         this.activity = activity;
     }
 
