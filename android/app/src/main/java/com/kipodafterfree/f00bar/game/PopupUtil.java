@@ -24,9 +24,10 @@ public class PopupUtil {
         alertDialog.show();
     }
 
-    public static void prompt(Activity activity, String text, final OnInput onInput) {
+    public static void prompt(Activity activity, String text, String hint, final OnInput onInput) {
         final EditText editText = new EditText(activity);
-        editText.setHint("Your input");
+        editText.setHint(hint);
+        editText.setPadding(30, 30, 30, 30);
         editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {

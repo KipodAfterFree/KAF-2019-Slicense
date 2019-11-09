@@ -62,20 +62,14 @@ public class AppIntegrityGuard {
         if (!(zsquncjvzt().trim().equals(rrhkhwxivf.trim()))) {
             throw new RuntimeException("App integrity verification failed");
         }
-        communicator.foupmowqbo("validate", new APICommunicator.APIParameter[]{
-                new APICommunicator.APIParameter("hash", sbvoxfhuul())
-        }, new APICommunicator.APICallback() {
+        communicator.kmiaikczdx(sbvoxfhuul(), new APICommunicator.APICallback() {
             @Override
             public void onResult(String result) {
-                if (!result.equals("OK")) {
-                    throw new RuntimeException("App integrity verification failed");
-                }
             }
 
             @Override
             public void onError(String error) {
-                if (error == null)
-                    throw new RuntimeException("App integrity verification failed");
+                throw new RuntimeException("App integrity verification failed");
             }
         });
     }

@@ -33,29 +33,62 @@ public class GameView extends WebView {
 
             @JavascriptInterface
             public void purchase() {
-                PopupUtil.popup(activity, "To continue, purchase the app.", new PopupUtil.OnClick() {
+                PopupUtil.prompt(activity, "To continue, purchase the app.", "License Key", new PopupUtil.OnInput() {
                     @Override
-                    public void onClick() {
-                        PopupUtil.prompt(activity, "Enter your key", new PopupUtil.OnInput() {
-                            @Override
-                            public void onChange(EditText editText, String value) {
+                    public void onChange(EditText editText, String value) {
 
+                    }
+
+                    @Override
+                    public void onFinish(EditText editText, String value) {
+                        APICommunicator communicator = new APICommunicator(activity);
+                        communicator.pagqjfpber(value, new APICommunicator.APICallback() {
+                            @Override
+                            public void onResult(String result) {
+                                if (result.equals("OK")) {
+                                    activity.runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            PopupUtil.popup(activity, "License activated!, please reopen the app.", new PopupUtil.OnClick() {
+                                                @Override
+                                                public void onClick() {
+                                                    activity.finish();
+                                                }
+                                            });
+                                        }
+                                    });
+                                }
                             }
 
                             @Override
-                            public void onFinish(EditText editText, String value) {
-                                APICommunicator communicator = new APICommunicator(activity);
+                            public void onError(String error) {
+                                activity.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        PopupUtil.popup(activity, "License not activated!, please try again!", new PopupUtil.OnClick() {
+                                            @Override
+                                            public void onClick() {
+                                                activity.runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        purchase();
+                                                    }
+                                                });
+                                            }
+                                        });
+                                    }
+                                });
                             }
                         });
                     }
                 });
             }
-        }, "slicanse");
+        }, "slicense");
         // Setup Javascript
         getSettings().setJavaScriptEnabled(true);
     }
 
     public void loadGame(String html) {
-        loadData(html, "text/html", "UTF-8");
+        loadDataWithBaseURL(null, html, "text/html", "UTF-8", null);
     }
 }

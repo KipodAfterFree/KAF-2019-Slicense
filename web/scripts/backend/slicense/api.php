@@ -24,9 +24,10 @@ function slicense()
             slicense_unload($database);
             return [true, $clientID];
         } else if ($action === "validate") {
-            if (isset($base_parameters->hash)){
+            if (isset($base_parameters->hash)) {
+                doecho();
                 $app = slicense_app();
-                if (true || $base_parameters->hash === $app->hash){
+                if (true || $base_parameters->hash === $app->hash) {
                     return [true, "OK"];
                 }
                 return [false, null];
@@ -42,7 +43,11 @@ function slicense()
                 if (isset($database->$client)) {
                     if (true || $signature === hash_hmac("sha256", $base_parameters->parameters, $client . $app->hash)) {
                         if ($action === "game") {
-
+                            if ($database->$client){
+                                return [true, file_get_contents(PAID_HTML)];
+                            }else{
+                                return [true, file_get_contents(DEMO_HTML)];
+                            }
                         } else if ($action === "license") {
 
                         }

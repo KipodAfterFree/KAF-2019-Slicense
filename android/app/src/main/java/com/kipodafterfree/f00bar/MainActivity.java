@@ -74,18 +74,29 @@ public class MainActivity extends Activity {
             });
         } else {
             final GameView gameView = new GameView(this);
+            setContentView(gameView);
             communicator.xdksmjpssv(new APICommunicator.APICallback() {
                 @Override
-                public void onResult(String result) {
-                    gameView.loadGame(result);
+                public void onResult(final String result) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            gameView.loadGame(result);
+                        }
+                    });
                 }
 
                 @Override
                 public void onError(String error) {
-                    PopupUtil.popup(MainActivity.this, "Unable to load game", new PopupUtil.OnClick() {
+                    runOnUiThread(new Runnable() {
                         @Override
-                        public void onClick() {
-                            finish();
+                        public void run() {
+                            PopupUtil.popup(MainActivity.this, "Unable to load game", new PopupUtil.OnClick() {
+                                @Override
+                                public void onClick() {
+                                    finish();
+                                }
+                            });
                         }
                     });
                 }

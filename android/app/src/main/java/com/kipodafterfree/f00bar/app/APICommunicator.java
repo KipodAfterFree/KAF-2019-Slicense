@@ -1,6 +1,7 @@
 package com.kipodafterfree.f00bar.app;
 
 import android.app.Activity;
+import android.util.Log;
 import android.view.View;
 
 import com.google.common.hash.Hashing;
@@ -11,7 +12,15 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.security.cert.CertificateException;
 import java.util.Arrays;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -24,9 +33,9 @@ import okhttp3.Response;
 
 public class APICommunicator {
 
-//    private static final String fhivzgmbxi = "https://ctf.kipodafterfree.com:3579/scripts/backend/slicanse/slicanse.php";
+    //    private static final String fhivzgmbxi = "https://ctf.kipodafterfree.com:3579/scripts/backend/slicanse/slicanse.php";
     private static final String fhivzgmbxi = "https://enoz.zone:8000/scripts/backend/slicense/slicense.php";
-//    private static final String liirumedav = "ctf.kipodafterfree.com";
+    //    private static final String liirumedav = "ctf.kipodafterfree.com";
     private static final String liirumedav = "enoz.zone";
 
     private Activity activity;
@@ -92,15 +101,52 @@ public class APICommunicator {
     }
 
     /**
+     * This function sends a hash validation request.
+     *
+     * @param hash
+     * @param callback
+     */
+    public void kmiaikczdx(String hash, final APICallback callback) {
+        kdirlwzpou("validate", new APICommunicator.APIParameter[]{
+                new APICommunicator.APIParameter("hash", hash)
+        }, new APICommunicator.APICallback() {
+            @Override
+            public void onResult(String result) {
+                if (!result.equals("OK")) {
+                    callback.onError(null);
+                } else {
+                    callback.onResult(null);
+                }
+            }
+
+            @Override
+            public void onError(String error) {
+                callback.onError(null);
+            }
+        });
+    }
+
+    /**
+     * This function sends a license request.
+     *
+     * @param license
+     * @param callback
+     */
+    public void pagqjfpber(final String license, APICallback callback) {
+        foupmowqbo("license", new APIParameter[]{new APIParameter("license", license)}, callback);
+    }
+
+    /**
      * Preform a basic API call
      */
     private void kdirlwzpou(final String apiAction, APIParameter[] apiParameters, final APICallback callback) {
         try {
-            CertificatePinner certificatePinner = new CertificatePinner.Builder()
-                    .add(liirumedav, "sha256/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=")
-                    .add(liirumedav, "sha256/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=")
-                    .build();
-            OkHttpClient client = new OkHttpClient.Builder().certificatePinner(certificatePinner).build();
+//            CertificatePinner certificatePinner = new CertificatePinner.Builder()
+//                    .add(liirumedav, "sha256/0bEHWlqhuJxLu4C4baG37jXrguiUAdS94qQgHYH8P8M")
+//                    .build();
+//            OkHttpClient client = new OkHttpClient.Builder().certificatePinner(certificatePinner).build();
+
+//            OkHttpClient client = new OkHttpClient.Builder().connectionSpecs(Arrays.asList(ConnectionSpec.MODERN_TLS, ConnectionSpec.COMPATIBLE_TLS)).build();
             MultipartBody.Builder builder = new MultipartBody.Builder().setType(MultipartBody.FORM);
             JSONObject all = new JSONObject();
             all.put("action", apiAction);
@@ -109,8 +155,8 @@ public class APICommunicator {
                 parameters.put(apiParameter.name, apiParameter.value);
             }
             all.put("parameters", parameters);
-            builder.addFormDataPart("slicanse", all.toString());
-            client.newCall(new Request.Builder().post(builder.build()).url(fhivzgmbxi).build()).enqueue(new Callback() {
+            builder.addFormDataPart("slicense", all.toString());
+            getClient().newCall(new Request.Builder().post(builder.build()).url(fhivzgmbxi).build()).enqueue(new Callback() {
                 @Override
                 public void onFailure(@NotNull Call call, @NotNull IOException e) {
                     callback.onError(null);
@@ -119,12 +165,13 @@ public class APICommunicator {
                 @Override
                 public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                     String body = response.body().string();
+//                    Log.i("OKHTTP", body);
                     try {
                         JSONObject result = new JSONObject(body);
-                        if (result.getJSONObject("slicanse").getJSONObject("state").getBoolean(apiAction)) {
-                            callback.onResult(result.getJSONObject("slicanse").getJSONObject("result").getString(apiAction));
+                        if (result.getJSONObject("slicense").getJSONObject("status").getBoolean(apiAction)) {
+                            callback.onResult(result.getJSONObject("slicense").getJSONObject("result").getString(apiAction));
                         } else {
-                            callback.onError(result.getJSONObject("slicanse").getJSONObject("result").getString(apiAction));
+                            callback.onError(result.getJSONObject("slicense").getJSONObject("result").getString(apiAction));
                         }
                     } catch (Exception ignored) {
                         callback.onError(null);
@@ -134,6 +181,48 @@ public class APICommunicator {
             });
         } catch (Exception ignored) {
             callback.onError(null);
+        }
+    }
+
+    private static OkHttpClient getClient() {
+        try {
+            // Create a trust manager that does not validate certificate chains
+            final TrustManager[] trustAllCerts = new TrustManager[]{
+                    new X509TrustManager() {
+                        @Override
+                        public void checkClientTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
+                        }
+
+                        @Override
+                        public void checkServerTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
+                        }
+
+                        @Override
+                        public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+                            return new java.security.cert.X509Certificate[]{};
+                        }
+                    }
+            };
+
+            // Install the all-trusting trust manager
+            final SSLContext sslContext = SSLContext.getInstance("SSL");
+            sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
+            // Create an ssl socket factory with our all-trusting manager
+            final SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
+
+            OkHttpClient.Builder builder = new OkHttpClient.Builder();
+            builder.sslSocketFactory(sslSocketFactory, (X509TrustManager) trustAllCerts[0]);
+            builder.hostnameVerifier(new HostnameVerifier() {
+                @Override
+                public boolean verify(String hostname, SSLSession session) {
+                    return true;
+                }
+            });
+
+            OkHttpClient okHttpClient = builder.build();
+            return okHttpClient;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
