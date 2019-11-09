@@ -38,7 +38,7 @@ public class MainActivity extends Activity {
     private void loadGame() throws NoSuchAlgorithmException, PackageManager.NameNotFoundException, IOException {
         AppIntegrityGuard appIntegrityGuard = new AppIntegrityGuard(this);
         appIntegrityGuard.qfgfwslqby();
-        PreferenceManager preferenceManager = new PreferenceManager(this);
+        final PreferenceManager preferenceManager = new PreferenceManager(this);
         APICommunicator communicator = new APICommunicator(this);
         if (preferenceManager.modrnzzhxp() == null) {
             communicator.txhcfmprvq(new APICommunicator.APICallback() {
@@ -88,17 +88,22 @@ public class MainActivity extends Activity {
 
                 @Override
                 public void onError(String error) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            PopupUtil.popup(MainActivity.this, "Unable to load game", new PopupUtil.OnClick() {
-                                @Override
-                                public void onClick() {
-                                    finish();
-                                }
-                            });
-                        }
-                    });
+                    if (error.equals("CIDERROR")) {
+                        preferenceManager.zgpgifjkot(null);
+                        start();
+                    }else{
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                PopupUtil.popup(MainActivity.this, "Unable to load game", new PopupUtil.OnClick() {
+                                    @Override
+                                    public void onClick() {
+                                        finish();
+                                    }
+                                });
+                            }
+                        });
+                    }
                 }
             });
         }

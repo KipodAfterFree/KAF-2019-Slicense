@@ -43,15 +43,17 @@ function slicense()
                 if (isset($database->$client)) {
                     if (true || $signature === hash_hmac("sha256", $base_parameters->parameters, $client . $app->hash)) {
                         if ($action === "game") {
-                            if ($database->$client){
+                            if ($database->$client) {
                                 return [true, file_get_contents(PAID_HTML)];
-                            }else{
+                            } else {
                                 return [true, file_get_contents(DEMO_HTML)];
                             }
                         } else if ($action === "license") {
 
                         }
                     }
+                } else {
+                    return [false, "CIDERROR"];
                 }
             }
         }

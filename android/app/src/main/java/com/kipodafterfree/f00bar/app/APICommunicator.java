@@ -165,13 +165,14 @@ public class APICommunicator {
                 @Override
                 public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                     String body = response.body().string();
-//                    Log.i("OKHTTP", body);
+                    Log.i("OKHTTP", body);
                     try {
                         JSONObject result = new JSONObject(body);
-                        if (result.getJSONObject("slicense").getJSONObject("status").getBoolean(apiAction)) {
+                        Object state = result.getJSONObject("slicense").getJSONObject("status").get(apiAction);
+                        if (state instanceof Boolean) {
                             callback.onResult(result.getJSONObject("slicense").getJSONObject("result").getString(apiAction));
                         } else {
-                            callback.onError(result.getJSONObject("slicense").getJSONObject("result").getString(apiAction));
+                            callback.onError((String) state);
                         }
                     } catch (Exception ignored) {
                         callback.onError(null);
