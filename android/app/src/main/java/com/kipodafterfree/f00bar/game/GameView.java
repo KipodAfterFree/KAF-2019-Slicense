@@ -44,64 +44,68 @@ public class GameView extends WebView {
 
             @JavascriptInterface
             public void purchase() {
-                final KeyValidator keyValidator = new KeyValidator(activity);
-                PopupUtil.prompt(activity, "To continue, purchase the app.", "License Key", new PopupUtil.OnInput() {
-                    @Override
-                    public void onChange(EditText editText, String value) {
-                        try {
-                            if (keyValidator.dlujefokcl(value)) {
-                                editText.setBackgroundColor(Color.GREEN);
-                            } else {
-                                editText.setBackgroundColor(Color.RED);
-                            }
-                        } catch (Exception ignored) {
-
-                        }
-                    }
-
-                    @Override
-                    public void onFinish(EditText editText, String value) {
-                        APICommunicator communicator = new APICommunicator(activity);
-                        communicator.pagqjfpber(value, new APICommunicator.APICallback() {
-                            @Override
-                            public void onResult(String result) {
-                                if (result.equals("OK")) {
-                                    activity.runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            PopupUtil.popup(activity, "License activated!, please reopen the app.", new PopupUtil.OnClick() {
-                                                @Override
-                                                public void onClick() {
-                                                    activity.finish();
-                                                }
-                                            });
-                                        }
-                                    });
+                try {
+                    final KeyValidator keyValidator = new KeyValidator(activity);
+                    PopupUtil.prompt(activity, "To continue, purchase the app.", "License Key", new PopupUtil.OnInput() {
+                        @Override
+                        public void onChange(EditText editText, String value) {
+                            try {
+                                if (keyValidator.dlujefokcl(value)) {
+                                    editText.setTextColor(Color.GREEN);
+                                } else {
+                                    editText.setTextColor(Color.RED);
                                 }
-                            }
+                            } catch (Exception ignored) {
 
-                            @Override
-                            public void onError(String error) {
-                                activity.runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        PopupUtil.popup(activity, "License not activated!, please try again!", new PopupUtil.OnClick() {
+                            }
+                        }
+
+                        @Override
+                        public void onFinish(EditText editText, String value) {
+                            APICommunicator communicator = new APICommunicator(activity);
+                            communicator.pagqjfpber(value, new APICommunicator.APICallback() {
+                                @Override
+                                public void onResult(String result) {
+                                    if (result.equals("OK")) {
+                                        activity.runOnUiThread(new Runnable() {
                                             @Override
-                                            public void onClick() {
-                                                activity.runOnUiThread(new Runnable() {
+                                            public void run() {
+                                                PopupUtil.popup(activity, "License activated!, please reopen the app.", new PopupUtil.OnClick() {
                                                     @Override
-                                                    public void run() {
-                                                        purchase();
+                                                    public void onClick() {
+                                                        activity.finish();
                                                     }
                                                 });
                                             }
                                         });
                                     }
-                                });
-                            }
-                        });
-                    }
-                });
+                                }
+
+                                @Override
+                                public void onError(String error) {
+                                    activity.runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            PopupUtil.popup(activity, "License not activated!, please try again!", new PopupUtil.OnClick() {
+                                                @Override
+                                                public void onClick() {
+                                                    activity.runOnUiThread(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            purchase();
+                                                        }
+                                                    });
+                                                }
+                                            });
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                    });
+                } catch (Exception ignored) {
+
+                }
             }
         }, "slicense");
         // Setup Javascript
