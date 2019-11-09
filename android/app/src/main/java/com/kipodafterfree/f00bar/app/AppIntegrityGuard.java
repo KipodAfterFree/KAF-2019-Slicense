@@ -47,7 +47,7 @@ public class AppIntegrityGuard {
      *
      * @return SHA256
      */
-    private String zsquncjvzt() throws PackageManager.NameNotFoundException, NoSuchAlgorithmException {
+    public String zsquncjvzt() throws PackageManager.NameNotFoundException, NoSuchAlgorithmException {
         PackageInfo info = activity.getPackageManager().getPackageInfo(activity.getPackageName(), PackageManager.GET_SIGNATURES);
         MessageDigest md = MessageDigest.getInstance("SHA256");
         md.update(info.signatures[0].toByteArray());

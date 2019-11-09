@@ -88,10 +88,10 @@ public class MainActivity extends Activity {
 
                 @Override
                 public void onError(String error) {
-                    if (error.equals("CIDERROR")) {
+                    if (error != null && error.equals("CIDERROR")) {
                         preferenceManager.zgpgifjkot(null);
                         start();
-                    }else{
+                    } else {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {

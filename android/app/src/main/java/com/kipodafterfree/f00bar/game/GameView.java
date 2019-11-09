@@ -1,6 +1,8 @@
 package com.kipodafterfree.f00bar.game;
 
 import android.app.Activity;
+import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
@@ -8,6 +10,15 @@ import android.webkit.WebViewClient;
 import android.widget.EditText;
 
 import com.kipodafterfree.f00bar.app.APICommunicator;
+import com.kipodafterfree.f00bar.app.KeyValidator;
+
+import java.io.IOException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 
 public class GameView extends WebView {
     public GameView(final Activity activity) {
@@ -33,10 +44,19 @@ public class GameView extends WebView {
 
             @JavascriptInterface
             public void purchase() {
+                final KeyValidator keyValidator = new KeyValidator(activity);
                 PopupUtil.prompt(activity, "To continue, purchase the app.", "License Key", new PopupUtil.OnInput() {
                     @Override
                     public void onChange(EditText editText, String value) {
+                        try {
+                            if (keyValidator.dlujefokcl(value)) {
+                                editText.setBackgroundColor(Color.GREEN);
+                            } else {
+                                editText.setBackgroundColor(Color.RED);
+                            }
+                        } catch (Exception ignored) {
 
+                        }
                     }
 
                     @Override
