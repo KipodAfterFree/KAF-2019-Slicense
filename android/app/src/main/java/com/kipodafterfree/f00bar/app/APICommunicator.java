@@ -6,10 +6,13 @@ import com.google.common.hash.Hashing;
 import com.kipodafterfree.f00bar.R;
 
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyStore;
 import java.security.cert.Certificate;
@@ -36,15 +39,19 @@ import okhttp3.Response;
 
 public class APICommunicator {
 
-    //    private static final String fhivzgmbxi = "https://ctf.kipodafterfree.com:3579/scripts/backend/slicanse/slicanse.php";
-    private static final String fhivzgmbxi = "https://enoz.zone:8000/scripts/backend/slicense/slicense.php";
-    //    private static final String liirumedav = "ctf.kipodafterfree.com";
-    private static final String liirumedav = "enoz.zone";
+    private String fhivzgmbxi, liirumedav;
 
     private Activity activity;
 
     public APICommunicator(Activity activity) {
         this.activity = activity;
+        try {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(activity.getResources().openRawResource(R.raw.app)));
+            JSONObject appJSON = new JSONObject(reader.readLine());
+            this.liirumedav = appJSON.getString("liirumedav");
+            this.fhivzgmbxi = "https://" + liirumedav + ":" + appJSON.getString("nddsdsfnjf") + "/scripts/backend/slicense/slicense.php";
+        } catch (IOException | JSONException ignored) {
+        }
     }
 
     /**
