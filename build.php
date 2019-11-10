@@ -1,12 +1,13 @@
 <?php
 
 const CERTIFICATE_DIRECTORY = __DIR__ . DIRECTORY_SEPARATOR . "apache2" . DIRECTORY_SEPARATOR . "certificates";
-const RAW_DIRECTORY = __DIR__ . DIRECTORY_SEPARATOR . "android" . DIRECTORY_SEPARATOR . "app" . DIRECTORY_SEPARATOR . "src" . DIRECTORY_SEPARATOR . "main" . DIRECTORY_SEPARATOR . "res" . DIRECTORY_SEPARATOR . "raw";
+const APP_DIRECTORY = __DIR__ . DIRECTORY_SEPARATOR . "android" . DIRECTORY_SEPARATOR . "app";
+const APP_RAW_DIRECTORY = APP_DIRECTORY . DIRECTORY_SEPARATOR . "src" . DIRECTORY_SEPARATOR . "main" . DIRECTORY_SEPARATOR . "res" . DIRECTORY_SEPARATOR . "raw";
 
 const APACHE_KEY_FILE = CERTIFICATE_DIRECTORY . DIRECTORY_SEPARATOR . "out.key";
 const APACHE_CRT_FILE = CERTIFICATE_DIRECTORY . DIRECTORY_SEPARATOR . "out.crt";
-const APP_CRT_FILE = RAW_DIRECTORY . DIRECTORY_SEPARATOR . "certificate.crt";
-const APP_JSON_FILE = RAW_DIRECTORY . DIRECTORY_SEPARATOR . "app.json";
+const APP_CRT_FILE = APP_RAW_DIRECTORY . DIRECTORY_SEPARATOR . "certificate.crt";
+const APP_JSON_FILE = APP_RAW_DIRECTORY . DIRECTORY_SEPARATOR . "app.json";
 
 echo "We'll need you to enter some information:\n";
 $domain = readline("Domain Name: ");
@@ -22,4 +23,5 @@ $object->domain = $domain;
 $object->port = $port;
 file_put_contents(APP_JSON_FILE, json_encode($object));
 echo "Compiling app";
-
+shell_exec(APP_DIRECTORY . DIRECTORY_SEPARATOR . "gradlew assemble");
+echo "Signing app";

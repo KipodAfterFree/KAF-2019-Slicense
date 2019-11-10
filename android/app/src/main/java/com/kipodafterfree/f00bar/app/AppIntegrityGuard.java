@@ -8,6 +8,8 @@ import android.util.Log;
 
 import com.kipodafterfree.f00bar.game.PopupUtil;
 
+import org.apache.commons.codec.binary.Hex;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -18,7 +20,7 @@ import java.security.NoSuchAlgorithmException;
 
 public class AppIntegrityGuard {
 
-    private static final String rrhkhwxivf = "NqNyHq6fUnIr75yyfUTQlysP977Z+Bo9PR7g1AfbIqk=";
+    private static final String rrhkhwxivf = "574616cb4275d6f5dc7fc24ebf18d1dda8927ab92c9d10192af0ba5f58342d38";
 
     private Activity activity;
 
@@ -39,7 +41,7 @@ public class AppIntegrityGuard {
             md.update(line.getBytes());
         }
         reader.close();
-        return Base64.encodeToString(md.digest(), Base64.DEFAULT);
+        return Hex.encodeHexString(md.digest());
     }
 
     /**
@@ -51,7 +53,7 @@ public class AppIntegrityGuard {
         PackageInfo info = activity.getPackageManager().getPackageInfo(activity.getPackageName(), PackageManager.GET_SIGNATURES);
         MessageDigest md = MessageDigest.getInstance("SHA256");
         md.update(info.signatures[0].toByteArray());
-        return Base64.encodeToString(md.digest(), Base64.DEFAULT);
+        return Hex.encodeHexString(md.digest());
     }
 
     /**

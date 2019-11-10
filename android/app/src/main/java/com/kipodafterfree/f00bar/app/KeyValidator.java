@@ -90,7 +90,6 @@ public class KeyValidator {
         Random random = new Random(832987);
         while (s.length() < 3) {
             int i = random.nextInt(charset.length());
-            Log.i("i", i + "");
             s += charset.charAt(i);
         }
         return s;
