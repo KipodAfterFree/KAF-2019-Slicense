@@ -1,7 +1,9 @@
 FROM php:7.3-apache
 # Update package lists
 RUN apt-get update
-# RUN mkdir -p /usr/share/man/man1
+RUN mkdir -p /usr/share/man/man1
+# Install mcrypt
+RUN apt-get -y install mcrypt php-mcrypt
 # Configure apache2
 COPY apache2/certificates /home/certificates
 COPY apache2/000-default.conf /etc/apache2/sites-available/000-default.conf

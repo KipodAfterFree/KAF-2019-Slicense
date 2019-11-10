@@ -14,6 +14,7 @@ const APP_KEYSTORE = ANDROID_DIRECTORY . DIRECTORY_SEPARATOR . "keystore.jks";
 const APP_APK = APP_DIRECTORY . DIRECTORY_SEPARATOR . "build" . DIRECTORY_SEPARATOR . "outputs" . DIRECTORY_SEPARATOR . "apk" . DIRECTORY_SEPARATOR . "release" . DIRECTORY_SEPARATOR . "app-release.apk";
 
 const WEB_APK = __DIR__ . DIRECTORY_SEPARATOR . "web" . DIRECTORY_SEPARATOR . "files" . DIRECTORY_SEPARATOR . "public" . DIRECTORY_SEPARATOR . "foobar.apk";
+const WEB_JSON_FILE = __DIR__ . DIRECTORY_SEPARATOR . "web" . DIRECTORY_SEPARATOR . "files" . DIRECTORY_SEPARATOR . "private" . DIRECTORY_SEPARATOR . "databases" . DIRECTORY_SEPARATOR . "app.json";
 
 echo "We'll need you to enter some information:\n";
 $domain = readline("Domain Name: ");
@@ -32,6 +33,11 @@ echo "Compiling & signing app\n";
 shell_exec("cd " . ANDROID_DIRECTORY . " && " . ANDROID_DIRECTORY . DIRECTORY_SEPARATOR . "gradlew :app:assembleRelease -Pandroid.injected.signing.store.file=" . APP_KEYSTORE . " -Pandroid.injected.signing.store.password=12345678 -Pandroid.injected.signing.key.alias=slicense -Pandroid.injected.signing.key.password=12345678");
 echo "Copying APK\n";
 copy(APP_APK, WEB_APK);
+echo "Configuring server\n";
+$object = new stdClass();
+$object->hash = hash_file("sha256", WEB_APK);
+$object->signature = "574616cb4275d6f5dc7fc24ebf18d1dda8927ab92c9d10192af0ba5f58342d38";
+file_put_contents(WEB_JSON_FILE, json_encode($object));
 echo "Building Docker\n";
 shell_exec("docker build " . __DIR__ . " -t slicense");
 echo "All done.\n";
