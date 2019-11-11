@@ -24,29 +24,15 @@ public class MainActivity extends Activity {
 
     private void start() {
         try {
-            PopupUtil.popup(this, new AppIntegrityGuard(this).sbvoxfhuul(), new PopupUtil.OnClick() {
+            loadGame();
+        } catch (IOException | NoSuchAlgorithmException | PackageManager.NameNotFoundException ignored) {
+            PopupUtil.popup(MainActivity.this, "Game crashed.", new PopupUtil.OnClick() {
                 @Override
                 public void onClick() {
-
+                    finish();
                 }
             });
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
         }
-//        try {
-//            loadGame();
-//        } catch (IOException | NoSuchAlgorithmException | PackageManager.NameNotFoundException ignored) {
-//            PopupUtil.popup(MainActivity.this, "Game crashed.", new PopupUtil.OnClick() {
-//                @Override
-//                public void onClick() {
-//                    finish();
-//                }
-//            });
-//        }
     }
 
     private void loadGame() throws NoSuchAlgorithmException, PackageManager.NameNotFoundException, IOException {
@@ -101,7 +87,7 @@ public class MainActivity extends Activity {
                 }
 
                 @Override
-                public void onError(String error) {
+                public void onError(final String error) {
                     if (error != null && error.equals("CIDERROR")) {
                         preferenceManager.zgpgifjkot(null);
                         start();

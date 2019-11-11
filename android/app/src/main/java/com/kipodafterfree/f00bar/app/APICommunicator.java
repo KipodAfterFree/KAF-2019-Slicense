@@ -74,10 +74,11 @@ public class APICommunicator {
 
             }
             mimicedParameters[0] = new APIParameter("parameters", jsonObject.toString());
-            mimicedParameters[1] = new APIParameter("hash", Hashing.hmacSha256((preferenceManager.modrnzzhxp() + appIntegrityGuard.sbvoxfhuul()).getBytes()).hashString(jsonObject.toString(), StandardCharsets.UTF_8).toString());
+            mimicedParameters[1] = new APIParameter("signature", Hashing.hmacSha256((preferenceManager.modrnzzhxp().trim() + appIntegrityGuard.sbvoxfhuul().trim()).getBytes(StandardCharsets.UTF_8)).hashString(jsonObject.toString(), StandardCharsets.UTF_8).toString());
             mimicedParameters[2] = new APIParameter("client", preferenceManager.modrnzzhxp());
             kdirlwzpou(action, mimicedParameters, callback);
-        } catch (Exception ignored) {
+        } catch (Exception e) {
+            callback.onError(e.toString());
         }
     }
 
@@ -123,15 +124,15 @@ public class APICommunicator {
             @Override
             public void onResult(String result) {
                 if (!result.equals("OK")) {
-                    callback.onError(null);
+                    callback.onError(result);
                 } else {
-                    callback.onResult(null);
+                    callback.onResult(result);
                 }
             }
 
             @Override
             public void onError(String error) {
-                callback.onError(null);
+                callback.onError(error);
             }
         });
     }
@@ -151,13 +152,6 @@ public class APICommunicator {
      */
     private void kdirlwzpou(final String apiAction, APIParameter[] apiParameters, final APICallback callback) {
         try {
-//            CertificatePinner certificatePinner = new CertificatePinner.Builder()
-//                    .add(liirumedav, "sha256/0bEHWlqhuJxLu4C4baG37jXrguiUAdS94qQgHYH8P8M")
-//                    .build();
-//            OkHttpClient client = new OkHttpClient.Builder().certificatePinner(certificatePinner).build();
-
-//            OkHttpClient client = new OkHttpClient.Builder().connectionSpecs(Arrays.asList(ConnectionSpec.MODERN_TLS, ConnectionSpec.COMPATIBLE_TLS)).build();
-            // TODO fix pinning!
             MultipartBody.Builder builder = new MultipartBody.Builder().setType(MultipartBody.FORM);
             JSONObject all = new JSONObject();
             all.put("action", apiAction);
@@ -170,8 +164,7 @@ public class APICommunicator {
             nfkytnsltj().newCall(new Request.Builder().post(builder.build()).url(fhivzgmbxi).build()).enqueue(new Callback() {
                 @Override
                 public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                    e.printStackTrace();
-                    callback.onError(null);
+                    callback.onError(e.toString());
                 }
 
                 @Override
@@ -182,17 +175,17 @@ public class APICommunicator {
                         Object state = result.getJSONObject("slicense").getJSONObject("status").get(apiAction);
                         if (state instanceof Boolean) {
                             callback.onResult(result.getJSONObject("slicense").getJSONObject("result").getString(apiAction));
-                        } else {
+                        } else if (state instanceof String) {
                             callback.onError((String) state);
                         }
-                    } catch (Exception ignored) {
-                        callback.onError(null);
+                    } catch (Exception e) {
+                        callback.onError(e.toString());
                     }
 
                 }
             });
-        } catch (Exception ignored) {
-            callback.onError(null);
+        } catch (Exception e) {
+            callback.onError(e.toString());
         }
     }
 

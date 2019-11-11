@@ -29,13 +29,13 @@ function slicense()
             if (isset($base_parameters->hash)) {
                 doecho();
                 $app = slicense_app();
-                if (true || $base_parameters->hash === $app->hash) {
+                if ($base_parameters->hash === $app->hash) {
                     return [true, "OK"];
                 }
                 return [false, null];
             }
         } else {
-            if (isset($base_parameters->client) && isset($base_parameters->hash) && isset($base_parameters->parameters)) {
+            if (isset($base_parameters->client) && isset($base_parameters->signature) && isset($base_parameters->parameters)) {
                 doecho();
                 $signature = $base_parameters->signature;
                 $client = $base_parameters->client;
@@ -57,10 +57,14 @@ function slicense()
                                 return [$state, $state ? "OK" : null];
                             }
                         }
+                    } else {
+                        return [false, "HMACERROR"];
                     }
                 } else {
                     return [false, "CIDERROR"];
                 }
+            } else {
+                return [false, "PARAMERROR"];
             }
         }
         return [false, null];

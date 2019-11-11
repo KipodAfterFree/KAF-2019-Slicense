@@ -12,7 +12,7 @@ import android.widget.EditText;
 public class PopupUtil {
     public static void popup(Activity activity, String text, final OnClick onClick) {
         AlertDialog alertDialog = new AlertDialog.Builder(activity)
-                .setTitle(text)
+                .setMessage(text)
                 .setCancelable(false)
                 .setPositiveButton("Okay", new DialogInterface.OnClickListener() {
                     @Override
