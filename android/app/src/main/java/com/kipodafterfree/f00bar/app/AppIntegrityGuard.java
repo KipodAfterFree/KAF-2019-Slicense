@@ -37,9 +37,13 @@ public class AppIntegrityGuard {
         PackageInfo info = activity.getPackageManager().getPackageInfo(activity.getPackageName(), PackageManager.GET_META_DATA);
         BufferedReader reader = new BufferedReader(new FileReader(new File(info.applicationInfo.sourceDir)));
         MessageDigest md = MessageDigest.getInstance("SHA256");
+        String whole = "";
         for (String line; (line = reader.readLine()) != null; ) {
-            md.update(line.getBytes());
+            if (whole.length() > 0)
+                whole += "\n";
+            whole += line.getBytes();
         }
+        md.update(whole.getBytes());
         reader.close();
         return Hex.encodeHexString(md.digest());
     }

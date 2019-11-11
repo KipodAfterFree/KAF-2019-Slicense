@@ -19,6 +19,20 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        try {
+            PopupUtil.popup(this, new AppIntegrityGuard(this).sbvoxfhuul(), new PopupUtil.OnClick() {
+                @Override
+                public void onClick() {
+
+                }
+            });
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
         start();
     }
 
