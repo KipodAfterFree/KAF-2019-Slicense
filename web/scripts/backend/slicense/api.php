@@ -54,7 +54,8 @@ function slicense()
                             if (isset($parameters->license)) {
                                 $license = $parameters->license;
                                 $state = slicense_validate($client, $license);
-                                return [$state, $state ? "OK" : null];
+                                error_log("returned");
+                                return [$state, $state ? "OK" : ""];
                             }
                         }
                     } else {
@@ -110,12 +111,13 @@ function slicense_validate($client, $license)
         $d = $part[3];
         if ($a !== NAME[$i])
             return false;
-        if (((pow(ord($a) + ord($b) + ord($c), $i + 1) + 128) % 256) - 128 !== ord($d))
+        if (tybe(byte(ord($b) + ord($c) - $i)) != tybe(ord($d)))
             return false;
         $wholeEncrypted .= $b;
         $wholeEncrypted .= $c;
     }
-    $validated = slicense_decrypt(slicense_key($app->hash . $app->signature . $client), $wholeEncrypted) === NAME;
+    $decrypted = openssl_decrypt($wholeEncrypted, 'AES-256-CBC', slicense_key($app->hash . $app->signature . $client), OPENSSL_NO_PADDING, NAME);
+    $validated = $decrypted === NAME;
     if ($validated) {
         $database->$client = true;
         slicense_unload($database);
@@ -123,17 +125,16 @@ function slicense_validate($client, $license)
     return $validated;
 }
 
-function slicense_decrypt($key, $encrypted)
+function byte($c)
 {
-    return rtrim(
-        mcrypt_decrypt(
-            MCRYPT_RIJNDAEL_256,
-            $key,
-            $encrypted,
-            MCRYPT_MODE_ECB,
-            NAME
-        ), "\0"
-    );
+    return (($c + 128) % 256) - 128;
+}
+
+function tybe($d)
+{
+    while ($d < 0)
+        $d += 256;
+    return $d % 256;
 }
 
 function slicense_key($key)

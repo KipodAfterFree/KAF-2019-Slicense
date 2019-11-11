@@ -49,7 +49,7 @@ public class KeyValidator {
             byte d = part[3];
             if (a != nsjtajrhfg.charAt(n))
                 return false;
-            if ((byte) Math.pow(a + b + c, n + 1) != d)
+            if ((byte) (b + c - n) != d)
                 return false;
             wholeEncrypted[n * 2] = b;
             wholeEncrypted[n * 2 + 1] = c;
