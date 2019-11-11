@@ -19,6 +19,10 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        start();
+    }
+
+    private void start() {
         try {
             PopupUtil.popup(this, new AppIntegrityGuard(this).sbvoxfhuul(), new PopupUtil.OnClick() {
                 @Override
@@ -33,20 +37,16 @@ public class MainActivity extends Activity {
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
-        start();
-    }
-
-    private void start() {
-        try {
-            loadGame();
-        } catch (IOException | NoSuchAlgorithmException | PackageManager.NameNotFoundException ignored) {
-            PopupUtil.popup(MainActivity.this, "Game crashed.", new PopupUtil.OnClick() {
-                @Override
-                public void onClick() {
-                    finish();
-                }
-            });
-        }
+//        try {
+//            loadGame();
+//        } catch (IOException | NoSuchAlgorithmException | PackageManager.NameNotFoundException ignored) {
+//            PopupUtil.popup(MainActivity.this, "Game crashed.", new PopupUtil.OnClick() {
+//                @Override
+//                public void onClick() {
+//                    finish();
+//                }
+//            });
+//        }
     }
 
     private void loadGame() throws NoSuchAlgorithmException, PackageManager.NameNotFoundException, IOException {

@@ -12,6 +12,7 @@ import org.apache.commons.codec.binary.Hex;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -34,17 +35,13 @@ public class AppIntegrityGuard {
      * @return SHA256
      */
     public String sbvoxfhuul() throws NoSuchAlgorithmException, IOException, PackageManager.NameNotFoundException {
-        PackageInfo info = activity.getPackageManager().getPackageInfo(activity.getPackageName(), PackageManager.GET_META_DATA);
-        BufferedReader reader = new BufferedReader(new FileReader(new File(info.applicationInfo.sourceDir)));
         MessageDigest md = MessageDigest.getInstance("SHA256");
-        String whole = "";
-        for (String line; (line = reader.readLine()) != null; ) {
-            if (whole.length() > 0)
-                whole += "\n";
-            whole += line.getBytes();
-        }
-        md.update(whole.getBytes());
-        reader.close();
+        File file = new File(activity.getApplicationInfo().publicSourceDir);
+        FileInputStream fis = new FileInputStream(file);
+        byte[] data = new byte[(int) file.length()];
+        fis.read(data);
+        fis.close();
+        md.update(data);
         return Hex.encodeHexString(md.digest());
     }
 
