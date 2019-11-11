@@ -2,11 +2,11 @@ FROM php:7.3-apache
 # Update package lists
 RUN apt-get update
 RUN mkdir -p /usr/share/man/man1
-# Install mcrypt
+# Install openssl
 RUN apt-get -y install openssl
 # Configure apache2
-COPY certificates /home/certificates
-COPY apache /etc/apache2/sites-available/000-default.conf
+COPY certificates/ /home/certificates
+COPY apache/000-default.conf /etc/apache2/sites-available/000-default.conf
 # Copy WebApp to /var/www/html
 COPY web /var/www/html
 # Change ownership of /var/www
