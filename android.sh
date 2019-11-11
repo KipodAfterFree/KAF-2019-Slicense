@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-./android/gradlew -p ./android/ :app:assembleRelease -Pandroid.injected.signing.store.file=./android/keystore.jks -Pandroid.injected.signing.store.password=12345678 -Pandroid.injected.signing.key.alias=slicense -Pandroid.injected.signing.key.password=12345678
+./android//gradlew :app:assembleRelease -p ./android/
 
 cp ./android/app/build/outputs/apk/release/app-release.apk ./web/files/public/foobar.apk
 

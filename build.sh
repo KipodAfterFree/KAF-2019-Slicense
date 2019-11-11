@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 
-./build.sh
+./android.sh
 
 docker build . -t slicense

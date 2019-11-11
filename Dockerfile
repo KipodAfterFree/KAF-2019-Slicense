@@ -6,7 +6,7 @@ RUN mkdir -p /usr/share/man/man1
 RUN apt-get -y install openssl
 # Configure apache2
 COPY certificates /home/certificates
-COPY apache2/000-default.conf /etc/apache2/sites-available/000-default.conf
+COPY apache /etc/apache2/sites-available/000-default.conf
 # Copy WebApp to /var/www/html
 COPY web /var/www/html
 # Change ownership of /var/www
