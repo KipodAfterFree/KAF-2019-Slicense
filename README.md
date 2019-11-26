@@ -24,7 +24,7 @@ Full app reversing
 
 To run the challenge, execute the following command:
 ```bash
-docker run --rm -d -p 3579:80 slicense
+docker run --rm -d -p 1160:443 slicense
 ```
 
 ## Flag
