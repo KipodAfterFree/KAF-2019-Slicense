@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-./android//gradlew :app:assembleRelease -p ./android/
+./android/gradlew :app:assembleRelease -p ./android/
 
 cp ./android/app/build/outputs/apk/release/app-release.apk ./web/files/public/foobar.apk
 
