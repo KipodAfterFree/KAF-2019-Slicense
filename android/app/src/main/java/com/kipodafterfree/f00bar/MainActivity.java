@@ -3,7 +3,6 @@ package com.kipodafterfree.f00bar;
 import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.util.Log;
 
 import com.kipodafterfree.f00bar.app.APICommunicator;
 import com.kipodafterfree.f00bar.app.AppIntegrityGuard;
